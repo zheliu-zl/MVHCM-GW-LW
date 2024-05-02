@@ -1,164 +1,16 @@
-%% 导入数据
+%% 
 clear,clc;
-%% Iris
-% load("Iris_data.mat");
-% C=max(truelabel{1});
-% [~,H]=size(data);
-% for h=1:H
-%     data{h}=data{h}';
-%     data{h}=mapminmax(data{h},0,1);
-%     data{h}=data{h}';
-% end
 
-%% Mfeat
-% load("Mfeat.mat");
-% pos='D3';
-% C=max(truelabel{1});
-% [~,H]=size(data);
-% for h=1:H
-%     data{h}=mapminmax(data{h},0,1);
-%     data{h}=data{h}';
-% end
-%% Webkb
-% load("webkb.mat");
-% pos='D6';
-% truelabel{1}=Y';
-% C=max(truelabel{1});
-% [~,H]=size(data);
-% for h=1:H
-%     data{h}=data{h}';
-%     data{h}=mapminmax(data{h},0,1);
-%     data{h}=data{h}';
-% end
-%% 3sources
-% load("3sources.mat");
-% pos='D9';
-% C=max(truelabel{1});
-% truelabel{1}=truelabel{1}';
-% [~,H]=size(data);
-% for h=1:H
-%     data{h}=mapminmax(data{h},0,1);
-%     data{h}=data{h}';
-% end
-%% HW2sources
-% load("HW2sources.mat");
-% pos='D12';
-% C=max(truelabel{1});
-% [~,H]=size(data);
-% for h=1:H
-%     data{h}=mapminmax(data{h},0,1);
-%     data{h}=data{h}';
-% end
-%% Caltech_2
-% load("Caltech_2.mat");
-% pos='D15';
-% data=Caltech_2.data;
-% truelabel{1}=Caltech_2.Y;
-% C=max(truelabel{1});
-% [~,H]=size(data);
-% for h=1:H
-%     data{h}=data{h}';
-%     data{h}=mapminmax(data{h},0,1);
-%     data{h}=data{h}';
-% end
-%% ORL
-% load ORL.mat
-%  data=X;
-% truelabel{1}=Y;
-% C=max(truelabel{1});
-% [~,H]=size(data);
-% for h=1:H
-%     data{h}=data{h}';
-%     data{h}=mapminmax(data{h},0,1);
-%     data{h}=data{h}';
-% end
-%% IS
-% Data = load('IS.txt');  Y = Data(:,end); Data(:,end) = [];
-% Data = mapminmax(Data',0,1); Data = Data';
-% view = 2; features = [9 10];
-% 
-% left = 1;right=0; X=cell(1,view);
-% for i=1:view
-%     X{i} = Data(:, left:features(i)+right);
-%     left = features(i)+right+1;
-%     right = features(i)+right;
-% end
-% data=X;
-% truelabel{1}=Y;
-% H=view;
-% C=max(Y);
-% pos='D18';
-
-%% BBC4
-% load BBC4view_685.mat;
-% C=max(truelabel{1});
-% truelabel{1}=truelabel{1}';
-% [~,H]=size(data);
-% for h = 1 : H
-%     data{h}=mapminmax(data{h},0,1);
-%     data{h}=data{h}';
-% end
-
-%% 100Leaves
-load 100Leaves.mat
-data=X;truelabel{1}=Y;
+%% motion
+load motion.mat
+data={X_person1,X_person2};
+truelabel{1}=Y_person1';
 C=max(truelabel{1});
 [~,H]=size(data);
 for h=1:H
-    data{h}=data{h}';
-    data{h}=mapminmax(data{h},0,1);
-    data{h}=data{h}';
+     data{h}=mapminmax(data{h},0,1);
+     data{h}=data{h}';
 end
-pos='D21';
-
-%%  MSRC-v1
-% load MSRC-v1.mat
-% data=X;
-% truelabel{1}=Y;
-% C=max(truelabel{1});
-% [~,H]=size(data);
-% for h=1:H
-%     data{h}=data{h}';
-%     data{h}=mapminmax(data{h},0,1);
-%     data{h}=data{h}';
-% end
-%% forest
-% Data = load('foresttype.txt');  Y = Data(:,end);
-% Data = mapminmax(Data',0,1); Data = Data';Data(:,end) = Y;
-% view = 2; features = [9 18];
-% 
-% left = 1;right=0; X=cell(1,view);
-% for i=1:view
-%     X{i} = Data(:, left:features(i)+right);
-%     left = features(i)+right+1;
-%     right = features(i)+right;
-% end
-% data=X;
-% truelabel{1}=Y;
-% C=max(truelabel{1});
-% H=view;
-
-%% MNIST-10k
-% load MNIST-10k.mat
-% data=X;
-% truelabel{1}=Y;
-% C=max(truelabel{1});
-% [~,H]=size(data);
-% for h=1:H
-%     data{h}=mapminmax(data{h},0,1);
-%     data{h}=data{h}';
-% end
-
-%% motion
-% load motion.mat
-% data={X_person1,X_person2};
-% truelabel{1}=Y_person1';
-% C=max(truelabel{1});
-% [~,H]=size(data);
-% for h=1:H
-%     data{h}=mapminmax(data{h},0,1);
-%     data{h}=data{h}';
-% end
 
 
 %% 初始化
@@ -167,12 +19,8 @@ pos='D21';
 times=10;
 AC1=zeros(times,1);
 nmi=zeros(times,1);
-P=zeros(times,1);
 R1=zeros(times,1);
-F=zeros(times,1);
 RI=zeros(times,1);
-FM=zeros(times,1);
-J=zeros(times,1);
 metrics=[];
 stdmetrics=[];
 %% 开始计算
@@ -279,27 +127,13 @@ for time=1:times
 end
 meanAC=mean(AC1);
 meanNMI=mean(nmi);
-meanP=mean(P);
 meanR1=mean(R1);
-meanF=mean(F);
 meanRI=mean(RI);
-meanFM=mean(FM);
-meanJ=mean(J);
 stdAC=std(AC1);
 stdNMI= std(nmi);
-stdP= std(P);
 stdR1= std(R1);
-stdF= std(F);
 stdRI= std(RI);
-stdFM= std(FM);
-stdJ= std(J);
-metrics = [metrics;[meanAC,meanNMI,meanP,meanR1,meanF,meanRI,meanFM,meanJ]];
-fprintf("ACC:%f,NMI:%f,P:%f,R:%f,F:%f,RI:%f,FM:%f,J:%f\n",meanAC,meanNMI,meanP,meanR1,meanF,meanRI,meanFM,meanJ);
-stdmetrics = [stdmetrics;[stdAC,stdNMI,stdP,stdR1,stdF,stdRI,stdFM,stdJ]];
-
-
-% writetable(table(M_ACC,M_EER,M_NMI,M_P,M_R,M_F,M_RI,M_FM,M_J),'聚类结果（修改后）.xlsx','WriteVariableNames',false,'Sheet','RMVHCM-VP','Range',pos);
-
-
-
+metrics = [metrics;[meanAC,meanNMI,meanR1,meanRI]];
+fprintf("ACC:%f,NMI:%f,R:%f,RI:%f\n",meanAC,meanNMI,meanR1,meanRI);
+stdmetrics = [stdmetrics;[stdAC,stdNMI,stdR1,stdRI]];
 
